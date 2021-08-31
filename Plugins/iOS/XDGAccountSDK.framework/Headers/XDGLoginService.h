@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)login:(void (^)(NSString *result))callback;
 + (void)logout;
 
+// TDS authentication
 + (void)loginSync:(void(^)(NSString *result))callback;
 
 + (void)addUserStatusChangeCallback:(void (^)(NSString *result))callback;
