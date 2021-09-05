@@ -1,88 +1,100 @@
-# XD-Intl Account
+# XD-Intl Account使用： 参考[Unity-demo](https://github.com/suguiming/Unity-demo)
 
-## 前提条件
-
-使用 XDGAccount 前提是必须使用以下依赖库:
-
-* [XDGCommon](https://github.com/Roongflee/XDGCommon.git)
-
-## 命名空间
-
-```c#
-using XD.Intl.Account
+## 1.在Packages/manifest.json中加入如下引用
+account依赖[common](https://github.com/suguiming/XDGCommon), common依赖其他六个。
+```
+"com.xd.intl.account": "https://github.com/suguiming/XDGAccount.git#6.0.0",
+"com.xd.intl.common": "https://github.com/suguiming/XDGCommon.git#6.0.0",
+"com.leancloud.realtime": "https://github.com/leancloud/csharp-sdk-upm.git#realtime-0.9.2",
+"com.leancloud.storage": "https://github.com/leancloud/csharp-sdk-upm.git#storage-0.9.2",
+"com.taptap.tds.bootstrap": "https://github.com/TapTap/TapBootstrap-Unity.git#3.1.0",
+"com.taptap.tds.common": "https://github.com/TapTap/TapCommon-Unity.git#3.1.0",
+"com.taptap.tds.login": "https://github.com/TapTap/TapLogin-Unity.git#3.1.0",
+"com.taptap.tds.tapdb": "https://github.com/TapTap/TapDB-Unity.git#3.1.0",
 ```
 
-## 接口描述
-###登录
-```c#
- XDGAccount.Login(user=
-{
-    //返回用户信息
-},(error)=>
-{
-    //登陆失败
+依赖的仓库地址
+* [TapTap.Common](https://github.com/TapTap/TapCommon-Unity.git)
+* [TapTap.Bootstrap](https://github.com/TapTap/TapBootstrap-Unity.git)
+* [TapTap.Login](https://github.com/TapTap/TapLogin-Unity.git)
+* [TapTap.TapDB](https://github.com/TapTap/TapDB-Unity.git)
+* [LeanCloud](https://github.com/leancloud/csharp-sdk-upm)
+
+
+## 2.配置SDK
+#### iOS配置
+* 将TDS-Info.plist 放在 /Assets/Plugins 中
+* 将XDG-Info.plist 放在 /Assets/Plists/iOS 中
+* 在Capabilities中打开In-App Purchase、Push Notifications、Sign In With Apple功能
+
+#### Android配置
+* 将XDG_info.json、google-Service.json 文件放在 /Assets/Plugins/Android/assets中
+
+## 3.命名空间
+
+```
+using XD.Intl.Account;
+using XD.Intl.Common;
+```
+
+## 4.接口使用
+#### 切换语言
+```
+XDGCommon.SetLanguage(LangType.ZH_CN);
+```
+
+#### 初始化SDK
+使用sdk前需先初始化
+```
+ XDGCommon.InitSDK((success => {
+                if (success){
+              
+                }else{
+                
+                }
+            }));
+```
+
+#### 登录
+```
+ XDGAccount.Login(user={
+    
+},(error)=>{
+    
 });
 ```
-###获取用户信息
-```c#
- XDGAccount.GetUser((user)=
-{
-    //返回用户信息
-},(error)=>
-{
-    //获取失败
-});
+
+#### 第三方登录
 ```
-###添加用户状态回调
-```c#
- XDGAccount.AddUserStatusChangeCallback((code)=
-{
+ XDGAccount.LoginByType(LoginType.Google, user => {
+              
+              },error => {
+                
+             });
+```
+
+#### 绑定用户状态回调(绑定，解绑，退出)
+```
+ XDGAccount.AddUserStatusChangeCallback((code)={
 
 });
 ```
-###用户中心
-```c#
+
+#### 获取用户信息
+```
+ XDGAccount.GetUser((user)={
+   
+},(error)=>{
+    
+});
+```
+
+#### 打开用户中心
+```
   XDGAccount.OpenUserCenter();
 ```
-###用户信息说明
-```c#
-public class XDGUser
-{
-[Serializable]
-public long userId; //是long 不是 int !
 
-// The user’s user ID in string.
-public string sub;
-
-// The user's user name.
-public string name;
-
-// The user's current loginType.
-public string loginType; //App传来的是字符串，如 TapTap。 通过 GetLoginType() 方法获取枚举
-
-public List<string> boundAccounts;
-
-// The user's token.
-public XDGAccessToken token;
-
-[Serializable]
-
-   public class XDGAccessToken{
-    // 唯一标志
-    public string kid;
-
-    // 认证码类型
-    public string tokenType;
-
-    // mac密钥
-    public string macKey;
-
-    // mac密钥计算方式
-    public string macAlgorithm;
-        
-    }
-}
+#### 退出登录
 ```
-
-
-...
+  XDGAccount.Logout();
+```
