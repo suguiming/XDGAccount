@@ -1,7 +1,7 @@
 {
-  "name": "XD.Intl.Account",
+  "name": "XDIntlAccount",
   "references": [
-    "XD.Intl.Common"
+    "XDIntlCommon"
   ],
   "includePlatforms": [
     "Editor"
